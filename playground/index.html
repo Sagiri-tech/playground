@@ -30,6 +30,7 @@
     p　{
         line-height: 1.6;
     }
+
     </style>
 </head>
 
@@ -62,16 +63,30 @@
 
     </section>
 
-    <button id="btn">押してみ</button>
+    <button id="btnAlert">押してみ</button>
 
     </div>
 
      <script>
-    document.getElementById("btn").onclick = function(){
+    document.getElementById("btnAlert").onclick = function(){
         alert("ここからがIT人生の始まり");
     };
  </script>
+  
+ <p id="msg">まだ何も起きてないね</p>
+ <button id="btnToggle">切り替え</button>
 
+ <script>　　　
+    let isChanged = false;
+    document.getElementById("btnToggle").onclick = function () {
+        if (isChanged) {
+        document.getElementById("msg").textContent = "変更";
+    } else {
+        document.getElementById("msg").textContent = "まだ何も起きてないね";  
+    }
+    isChanged = !isChanged;
+    };
+    </script>
 
 
 </body>
