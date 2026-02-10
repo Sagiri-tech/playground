@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: hsl(0, 0%, 0%);
+        padding: 40px;
+      }
+      .container {
+        border: 3px solid red;
+        max-width: 600px;
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+      }
+
+      h1 {
+        margin: 0;
+      }
+
+      h2 {
+        margin-top: 32px;
+        border-bottom: 2px solid #ffffff;
+      }
+
+      p {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- TODO:ここからHTML -->
+    <div class="container">
+      <!-- TODO:文章の書き方 -->
+      <section>
+        <h1>hello Would</h1>
+        <h2>よろしく 世界</h2>
+
+        <p>START Here</p>
+        <p>ここから始まる</p>
+      </section>
+
+      <!-- TODO:hはタイトル、数は大きさ、ｐが文 -->
+      <section>
+        <h2>my name is S</h2>
+        <h3>俺の名前はS</h3>
+        <p>I am studying IT</p>
+        <p>俺はITを学んでいる</p>
+      </section>
+
+      <section>
+        <!-- TODO:liは「・」 -->
+        <h2>I will be rich people</h2>
+        <h3>俺は金持ちになるつもり</h3>
+        <ul>
+          <li>to cleate website</li>
+          <li>plograming</li>
+        </ul>
+      </section>
+
+      <!-- TODO:上からのボタン -->
+      <button id="btnAlert">押してみ</button>
+
+      <p id="msg">まだ何も起きてないね</p>
+      <!-- TODO:切り替えのボタン -->
+      <button id="btnToggle">切り替え</button>
+
+      <!--TODO:入力ボタン-->
+      <input id="nameInput" type="text" placeholder="名前を入力" />
+      <button id="btnSubmit">送信</button>
+
+      <p id="output">まだ未入力</p>
+
+      <!-- TODO:入力リスト　-->
+      <ul id="nameList"></ul>
+    </div>
+
+    <script>
+      // ======表示系===== //
+      function showMessage(text, color) {
+        const output = document.getElementById("output");
+        output.textContent = text;
+        output.style.color = color;
+      }
+
+      // =====重複確認===== //
+      function isDuplicate(value) {
+        const items = document.querySelectorAll("#nameList li");
+        for (const li of items) {
+          if (li.textContent === value) return true;
+        }
+        return false;
+      }
+
+      // ======リスト追加===== //
+      function addToList(value) {
+        const list = document.getElementById("nameList");
+        const li = document.createElement("li");
+        li.textContent = value;
+        list.appendChild(li);
+      }
+      // TODO:上からのボタン
+      document.getElementById("btnAlert").onclick = function () {
+        alert("ここからがIT人生の始まり");
+      };
+
+      //　TODO:切り替えボタン
+      let isChanged = false;
+      document.getElementById("btnToggle").onclick = function () {
+        if (isChanged) {
+          document.getElementById("msg").textContent = "変更";
+        } else {
+          document.getElementById("msg").textContent = "まだ何も起きてないね";
+        }
+        isChanged = !isChanged;
+      };
+
+      //　TODO:入力ボタン
+      document.getElementById("btnSubmit").onclick = function () {
+        const input = document.getElementById("nameInput");
+        const value = input.value.trim();
+
+        // 空確認
+        if (value === "") {
+          showMessage("Please input name", "red");
+          return;
+        }
+
+        // 重複確認
+        if (isDuplicate(value)) {
+          showMessage("既に使用されています", "red");
+          return;
+        }
+
+        // OK時
+        showMessage("OK", "green");
+        addToList(value);
+        input.value = "";
+      };
+
+      //　TODO:ENTERキー送信
+      document
+        .getElementById("nameInput")
+        .addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            document.getElementById("btnSubmit").click();
+          }
+        });
+    </script>
+  </body>
+</html>
