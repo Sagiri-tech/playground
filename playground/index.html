@@ -8,7 +8,7 @@
     <style>
       body {
         font-family: sans-serif;
-        background-color: hsla(221, 89%, 57%, 0.3);
+        background-color: hsl(0, 0%, 0%);
         padding: 40px;
       }
       .container {
@@ -35,7 +35,7 @@
   </head>
 
   <body>
-    　<!-- TODO:ここからHTML -->
+    <!-- TODO:ここからHTML -->
     <div class="container">
       <!-- TODO:文章の書き方 -->
       <section>
@@ -76,9 +76,13 @@
       <button id="btnSubmit">送信</button>
 
       <p id="output">まだ未入力</p>
+
+      <!-- TODO:入力リスト　-->
+      <ul id="nameList"></ul>
     </div>
 
     <script>
+      // TODO:ここからがJS
       // TODO:上からのボタン
       document.getElementById("btnAlert").onclick = function () {
         alert("ここからがIT人生の始まり");
@@ -98,7 +102,36 @@
       //　TODO:入力ボタン
       document.getElementById("btnSubmit").onclick = function () {
         const value = document.getElementById("nameInput").value;
-        document.getElementById("output").textContent = value;
+        const output = document.getElementById("output");
+
+        // TODO:入力確認
+        if (value === "") {
+          output.textContent = "名前を入力";
+          output.style.color = "red";
+        } else {
+          // TODO:重複確認
+          const listItems = document.querySelectorAll("#nameList li");
+          let isDuplicate = false;
+
+          listItems.forEach((li) => {
+            if (li.textContent === value) {
+              isDuplicate = true;
+            }
+          });
+
+          if (isDuplicate) {
+            output.textContent = "既に使用されています";
+            output.style.color = "red";
+            return; // TODO:←ここで処理終了
+          }
+          //　TODO:ここで、入力されたらリスト追加！
+          output.textContent = value;
+          output.style.color = "green";
+
+          const li = document.createElement("li");
+          li.textContent = value;
+          document.getElementById("nameList").appendChild(li);
+        }
       };
 
       //　TODO:ENTERキー送信
