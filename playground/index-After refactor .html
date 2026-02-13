@@ -91,9 +91,11 @@
 
       // =====重複確認===== //
       function isDuplicate(value) {
-        const items = document.querySelectorAll("#nameList li");
+        const items = document.querySelectorAll("#nameList li span");
         for (const li of items) {
-          if (li.textContent === value) return true;
+          if (li.textContent === value) {
+            return true;
+          }
         }
         return false;
       }
@@ -102,9 +104,54 @@
       function addToList(value) {
         const list = document.getElementById("nameList");
         const li = document.createElement("li");
-        li.textContent = value;
+
+        const span = document.createElement("span");
+        span.textContent = value;
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "編集";
+        editBtn.style.marginLeft = "10px";
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "x";
+        deleteBtn.style.marginLeft = "20px";
+
+        // 編集処理
+        editBtn.onclick = function () {
+          const input = document.getElementById("nameInput");
+          input.value = span.textContent;
+          //　編集確定処理
+          document.getElementById("btnSubmit").onclick = function () {
+            const newValue = input.value.trim();
+
+            if (newValue === "") {
+              showMessage("Please input name", "red");
+              return;
+            }
+
+            span.textContent = newValue;
+            showMessage("Update", "green");
+            saveList();
+            input.value = "";
+
+            // 元の送信処理に戻す
+            resetSubmit();
+          };
+        };
+
+        //　削除処理
+        deleteBtn.onclick = function () {
+          li.remove();
+          saveList();
+        };
+
+        li.appendChild(span);
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
         list.appendChild(li);
+        saveList();
       }
+
       // TODO:上からのボタン
       document.getElementById("btnAlert").onclick = function () {
         alert("ここからがIT人生の始まり");
@@ -122,27 +169,29 @@
       };
 
       //　TODO:入力ボタン
-      document.getElementById("btnSubmit").onclick = function () {
-        const input = document.getElementById("nameInput");
-        const value = input.value.trim();
+      function resetSubmit() {
+        document.getElementById("btnSubmit").onclick = function () {
+          const input = document.getElementById("nameInput");
+          const value = input.value.trim();
 
-        // 空確認
-        if (value === "") {
-          showMessage("Please input name", "red");
-          return;
-        }
+          // 空確認
+          if (value === "") {
+            showMessage("Please input name", "red");
+            return;
+          }
 
-        // 重複確認
-        if (isDuplicate(value)) {
-          showMessage("既に使用されています", "red");
-          return;
-        }
+          // 重複確認
+          if (isDuplicate(value)) {
+            showMessage("既に使用されています", "red");
+            return;
+          }
 
-        // OK時
-        showMessage("OK", "green");
-        addToList(value);
-        input.value = "";
-      };
+          // OK時
+          showMessage("OK", "green");
+          addToList(value);
+          input.value = "";
+        };
+      }
 
       //　TODO:ENTERキー送信
       document
@@ -152,6 +201,32 @@
             document.getElementById("btnSubmit").click();
           }
         });
+      //
+      // ローカル保存
+      function saveList() {
+        const items = document.querySelectorAll("#nameList li span");
+        const values = [];
+
+        for (const span of items) {
+          values.push(span.textContent);
+        }
+
+        localStorage.setItem("nameList", JSON.stringify(values));
+      }
+
+      //　ローカル保存を呼び出す
+      function loadList() {
+        const saved = localStorage.getItem("nameList");
+        if (!saved) return;
+
+        const values = JSON.parse(saved);
+
+        for (const value of values) {
+          addToList(value);
+        }
+      }
+      loadList();
+      resetSubmit();
     </script>
   </body>
 </html>
