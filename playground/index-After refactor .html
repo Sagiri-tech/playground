@@ -8,15 +8,24 @@
     <style>
       body {
         font-family: sans-serif;
-        background-color: hsl(0, 0%, 0%);
+        background-color: hsl(85, 100%, 3%);
         padding: 40px;
       }
       .container {
-        border: 3px solid red;
+        border: 5px solid rgba(1, 92, 61, 0.514);
         max-width: 600px;
         background: white;
         padding: 24px;
         border-radius: 12px;
+        display: flex;
+        gap: 40px;
+      }
+
+      .left {
+        flex: 1;
+      }
+      .right {
+        flex: 1;
       }
 
       h1 {
@@ -37,48 +46,59 @@
   <body>
     <!-- TODO:ここからHTML -->
     <div class="container">
-      <!-- TODO:文章の書き方 -->
-      <section>
-        <h1>hello Would</h1>
-        <h2>よろしく 世界</h2>
+      <div class="left">
+        <!-- TODO:文章の書き方 -->
+        <section>
+          <h1>hello Would</h1>
+          <h2>よろしく 世界</h2>
 
-        <p>START Here</p>
-        <p>ここから始まる</p>
-      </section>
+          <p>START Here</p>
+          <p>ここから始まる</p>
+        </section>
 
-      <!-- TODO:hはタイトル、数は大きさ、ｐが文 -->
-      <section>
-        <h2>my name is S</h2>
-        <h3>俺の名前はS</h3>
-        <p>I am studying IT</p>
-        <p>俺はITを学んでいる</p>
-      </section>
+        <!-- TODO:hはタイトル、数は大きさ、ｐが文 -->
+        <section>
+          <h2>my name is S</h2>
+          <h3>俺の名前はS</h3>
+          <p>I am studying IT</p>
+          <p>俺はITを学んでいる</p>
+        </section>
 
-      <section>
-        <!-- TODO:liは「・」 -->
-        <h2>I will be rich people</h2>
-        <h3>俺は金持ちになるつもり</h3>
-        <ul>
-          <li>to cleate website</li>
-          <li>plograming</li>
-        </ul>
-      </section>
+        <section>
+          <!-- TODO:liは「・」 -->
+          <h2>I will be rich people</h2>
+          <h3>俺は金持ちになるつもり</h3>
+          <ul>
+            <li>to cleate website</li>
+            <li>plograming</li>
+          </ul>
+        </section>
 
-      <!-- TODO:上からのボタン -->
-      <button id="btnAlert">押してみ</button>
+        <!-- TODO:上からのボタン -->
+        <button id="btnAlert">押してみ</button>
 
-      <p id="msg">まだ何も起きてないね</p>
-      <!-- TODO:切り替えのボタン -->
-      <button id="btnToggle">切り替え</button>
+        <p id="msg">まだ何も起きてないね</p>
+        <!-- TODO:切り替えのボタン -->
+        <button id="btnToggle">切り替え</button>
 
-      <!--TODO:入力ボタン-->
-      <input id="nameInput" type="text" placeholder="名前を入力" />
-      <button id="btnSubmit">送信</button>
+        <!--TODO:入力ボタン-->
+        <input id="nameInput" type="text" placeholder="名前を入力" />
+        <button id="btnSubmit">送信</button>
 
-      <p id="output">まだ未入力</p>
+        <p id="output">まだ未入力</p>
+
+        <!-- TODO:カウントボタン　-->
+        <p id="counter">0</p>
+        <button id="btn">カウント</button>
+
+        <!-- リセットボタン-->
+        <button id="resetBtn">リセット</button>
+      </div>
 
       <!-- TODO:入力リスト　-->
-      <ul id="nameList"></ul>
+      <div class="right">
+        <ul id="nameList"></ul>
+      </div>
     </div>
 
     <script>
@@ -142,6 +162,8 @@
         //　削除処理
         deleteBtn.onclick = function () {
           li.remove();
+          count = 0;
+          document.getElementById("counter").textContent = count;
           saveList();
         };
 
@@ -201,7 +223,21 @@
             document.getElementById("btnSubmit").click();
           }
         });
-      //
+
+      //　カウント
+      let count = 0;
+
+      document.getElementById("btn").onclick = function () {
+        count++;
+        document.getElementById("counter").textContent = count;
+      };
+
+      //　リセット
+      document.getElementById("resetBtn").onclick = function () {
+        count = 0;
+        document.getElementById("counter").textContent = count;
+      };
+
       // ローカル保存
       function saveList() {
         const items = document.querySelectorAll("#nameList li span");
