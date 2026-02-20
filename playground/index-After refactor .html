@@ -111,9 +111,9 @@
 
       // =====重複確認===== //
       function isDuplicate(value) {
-        const items = document.querySelectorAll("#nameList li span");
+        const items = document.querySelectorAll("#nameList li");
         for (const li of items) {
-          if (li.textContent === value) {
+          if (li.dataset.name === value) {
             return true;
           }
         }
@@ -125,8 +125,13 @@
         const list = document.getElementById("nameList");
         const li = document.createElement("li");
 
+        li.dataset.name = value;
+
         const span = document.createElement("span");
         span.textContent = value;
+
+        // 表示を「さん付け」
+        span.textContent = `${value}さん`;
 
         const editBtn = document.createElement("button");
         editBtn.textContent = "編集";
@@ -136,10 +141,17 @@
         deleteBtn.textContent = "x";
         deleteBtn.style.marginLeft = "20px";
 
+        // =====文字数制限===== //
+        const maxLength = 7;
+        if (value.length > maxLength) {
+          showMessage("長すぎます", "red");
+          return;
+        }
+
         // 編集処理
         editBtn.onclick = function () {
           const input = document.getElementById("nameInput");
-          input.value = span.textContent;
+          input.value = li.dataset.name;
           //　編集確定処理
           document.getElementById("btnSubmit").onclick = function () {
             const newValue = input.value.trim();
@@ -149,7 +161,9 @@
               return;
             }
 
-            span.textContent = newValue;
+            li.dataset.name = newValue;
+            span.textContent = `${newValue}さん`;
+
             showMessage("Update", "green");
             saveList();
             input.value = "";
@@ -240,11 +254,11 @@
 
       // ローカル保存
       function saveList() {
-        const items = document.querySelectorAll("#nameList li span");
+        const items = document.querySelectorAll("#nameList li");
         const values = [];
 
-        for (const span of items) {
-          values.push(span.textContent);
+        for (const li of items) {
+          values.push(li.dataset.name);
         }
 
         localStorage.setItem("nameList", JSON.stringify(values));
