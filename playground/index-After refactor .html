@@ -40,6 +40,14 @@
       p {
         line-height: 1.6;
       }
+
+      #nameList li {
+        display: flex;
+        align-items: center;
+      }
+      #nameList li span {
+        flex: 1;
+      }
     </style>
   </head>
 
@@ -97,6 +105,8 @@
 
       <!-- TODO:入力リスト　-->
       <div class="right">
+        <p>登録人数: <span id="count">0</span></p>
+        <button id="clearAll">全削除</button>
         <ul id="nameList"></ul>
       </div>
     </div>
@@ -124,6 +134,8 @@
       function addToList(value) {
         const list = document.getElementById("nameList");
         const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.alignItems = "center";
 
         li.dataset.name = value;
 
@@ -176,9 +188,11 @@
         //　削除処理
         deleteBtn.onclick = function () {
           li.remove();
+          updateCount();
           count = 0;
           document.getElementById("counter").textContent = count;
           saveList();
+          deleteBtn.style.marginLeft = "5px";
         };
 
         li.appendChild(span);
@@ -226,6 +240,7 @@
           showMessage("OK", "green");
           addToList(value);
           input.value = "";
+          updateCount();
         };
       }
 
@@ -237,6 +252,26 @@
             document.getElementById("btnSubmit").click();
           }
         });
+
+      // リスト人数
+      function updateCount() {
+        const items = document.querySelectorAll("#nameList li");
+        document.getElementById("count").textContent = items.length;
+      }
+
+      //　全削除
+      document.getElementById("clearAll").onclick = function () {
+        const ok = confirm("本当に削除してもいいですか？");
+
+        if (!ok) return;
+
+        const list = document.getElementById("nameList");
+        list.innerHTML = "";
+        showMessage("全て削除しました", "green");
+
+        updateCount();
+        saveList();
+      };
 
       //　カウント
       let count = 0;
