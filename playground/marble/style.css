@@ -3,13 +3,31 @@ body {
   text-align: center;
   font-family: sans-serif;
 }
+.board {
+  width: 800px;
+  height: 600px;
+  background: #eee;
+  margin: auto;
+  position: relative;
+}
+canvas {
+  background: #eee;
+}
 
-#ball {
+/*　make holes layout as grid 4 columns*/
+.holes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+/* make square hole center the border */
+.hole {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
-  background: skyblue;
-  margin: 20px auto;
+  background: lightgray;
   display: flex;
   align-items: center;
   justify-content: center;
