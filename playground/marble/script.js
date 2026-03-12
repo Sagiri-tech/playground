@@ -21,6 +21,7 @@ function isPrime(n) {
   }
   return true;
 }
+
 // 円を描く
 function drawball() {
   ctx.beginPath();
@@ -37,12 +38,16 @@ function drawball() {
   }
 }
 
+//slopeオブジェクト指向
+const slopeA = { x1: 621, y1: 129, x2: 107, y2: 190 };
+const slopeB = { x1: 1, y1: 232, x2: 621, y2: 338 };
+
 // slopeを描く
-function drawslope() {
+function drawslope(slope) {
   ctx.beginPath();
 
-  ctx.moveTo(107, 190);
-  ctx.lineTo(621, 129);
+  ctx.moveTo(slope.x1, slope.y1);
+  ctx.lineTo(slope.x2, slope.y2);
 
   ctx.strokeStyle = "black";
   ctx.lineWidth = 8;
@@ -50,34 +55,69 @@ function drawslope() {
   ctx.stroke();
 }
 
+//slope呼び出し
+function allDrawSlope() {
+  drawslope(slopeA);
+  drawslope(slopeB);
+}
+// 動き
 function update() {
   ctx.clearRect(0, 0, 800, 600);
-
-  drawslope();
+  allDrawSlope();
   drawball();
 
   if (running) {
-    x -= vx;
-    y += vy;
+    const acceleration = g * Math.sin(Math.abs(physicsA.angle));
+    velocity += acceleration;
+    velocity *= friction;
+
+    x += velocity * physicsA.ux;
+    y += velocity * physicsA.uy;
     requestAnimationFrame(update);
   }
 }
 
-// 転がる速度の計算
-let angle = 30 * (Math.PI / 180); // 角度をラジアンに変換
-let speed = 5; // 転がる速度
+// slopeAの物理演算
+const physicsA = caluSlope(slopeA);
 
-let vx = speed * Math.cos(angle); // x方向の速度
-let vy = speed * Math.sin(angle); // y方向の速度
+const radius = 25; // 円の半径
+let x = slopeA.x1 + physicsA.nx * radius;
+let y = slopeA.y1 + physicsA.ny * radius;
+let running = false;
+let volatile = 0;
+
+//　物理演算
+const g = 0.5; // 重力定数
+const friction = 0.99; // 摩擦係数
+
+// slopeのから物理演算
+function caluSlope(slope) {
+  const dx = slope.x2 - slope.x1;
+  const dy = slope.y2 - slope.y1;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  return {
+    angle: Math.atan2(dy, dx),
+    ux: dx / dist,
+    uy: dy / dist,
+
+    // 法線ベクトル
+    nx: -dy / dist,
+    ny: dx / dist,
+  };
+}
+
+// 速度
+let velocity = 0;
 
 // リセット
 function reset() {
   running = false;
-  x = 620;
-  y = 100;
+  x = slopeA.x1 + physicsA.nx * radius;
+  y = slopeA.y1 + physicsA.ny * radius;
+  velocity = 0;
   currentnumber = 0;
   ctx.clearRect(0, 0, 800, 600);
-  drawslope();
+  allDrawSlope();
   drawball();
 }
 
